@@ -4,9 +4,8 @@ Author : David Valencia
 Date : March-29-2020
 
 Description: Read basic info from turtlebot3 robot using ROS melodic and gazebo
-
+             control position with a PID controller
 """
-
 import rospy
 import math
 import numpy as np
@@ -25,7 +24,6 @@ class TurtleBotNode:
         self.pose_x = 0
         self.pose_y = 0
         self.yaw_deg = 0
-
         self.rate = rospy.Rate(10)
 
     def callback_update_position(self, data):
@@ -40,7 +38,6 @@ class TurtleBotNode:
     def calculations(self):
         goal_pose_x = input("Set your x goal: ")
         goal_pose_y = input("Set your y goal: ")
-
 
         PID_Yaw = pid_controller(0.05, 0.00, 0.01, 0.3)
         PID_Distance = pid_controller(0.001, 0.1, 1.6, 0.5)
@@ -69,12 +66,12 @@ class TurtleBotNode:
 
 
 class pid_controller:
+
     def __init__(self, p_coef, i_coef, d_coef, limit_out):
 
         self.kp = p_coef
         self.ki = i_coef
         self.kd = d_coef
-
         self._limit_out = limit_out
         self._previous_error = 0.0
 
@@ -105,15 +102,9 @@ def shutdown_callback():
 
 
 if __name__ == "__main__":
+
     rospy.init_node('turtle_bot_basic_controller', anonymous=True)
     a = TurtleBotNode()
     a.calculations()
     rospy.on_shutdown(shutdown_callback)
     rospy.spin()
-
-
-
-
-
-
-
